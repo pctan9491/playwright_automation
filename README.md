@@ -30,3 +30,6 @@ This project is set up for learning Playwright with TypeScript.
 4.  **Trace Viewer**: Debugging failed tests.
 # playwright_automation
 playwright_automation_learning
+
+# Open CODEGEN
+npx playwright codegen https://playwright.dev/
