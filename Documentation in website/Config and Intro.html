@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playwright: The Automation Robot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Chosen Palette: Cyber-Pop */
+        /* Primary: #4f46e5 (Indigo-600) */
+        /* Secondary: #db2777 (Pink-600) */
+        /* Accent: #059669 (Emerald-600) */
+        /* Background: #f8fafc (Slate-50) */
+        
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background-color: #e2e8f0;
+            z-index: 0;
+        }
+        
+        .nav-sticky {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+    </style>
+    <!-- Chosen Palette: Cyber-Pop (Indigo/Pink/Emerald) - Energetic & Playful to reflect modern automation. -->
+    <!-- Application Structure Plan: 
+         1. Hero Section: Hook the user with the "Robot vs Human" analogy. 
+         2. The Efficiency Gap (Chart): Quantitative proof of why Playwright is better (Goal: Compare).
+         3. The Installation Journey (Timeline): Visualizing the setup command flow (Goal: Change/Process).
+         4. Project Anatomy (Grid): Explaining the file structure (Goal: Organize).
+         5. Choosing Your Mode (Chart): Radar chart to help users pick the right running mode (Goal: Compare).
+         6. The Health Report (Chart): Visualizing the reporting capability (Goal: Inform).
+         This structure moves from "Why" -> "How to Start" -> "What you get" -> "How to Run" -> "Result". -->
+    <!-- Visualization & Content Choices:
+         1. Efficiency Bar Chart: Compares Manual vs Playwright time/effort. Chart.js (Bar). No SVG.
+         2. Installation Timeline: Structured HTML/Tailwind vertical flow. No SVG.
+         3. Modes Radar Chart: Compares Speed, Visuals, Debugging for 3 modes. Chart.js (Radar). No SVG.
+         4. Report Doughnut Chart: Shows Pass/Fail metrics. Chart.js (Doughnut). No SVG.
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="nav-sticky border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-pink-600">
+                        Playwright.
+                    </span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#why" class="text-slate-600 hover:text-indigo-600 font-medium transition">Why Playwright?</a>
+                    <a href="#setup" class="text-slate-600 hover:text-indigo-600 font-medium transition">Setup</a>
+                    <a href="#modes" class="text-slate-600 hover:text-indigo-600 font-medium transition">Run Modes</a>
+                    <a href="#reports" class="text-slate-600 hover:text-indigo-600 font-medium transition">Reports</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+                <div class="inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-wider text-indigo-600 uppercase bg-indigo-50 rounded-full">
+                    End-to-End Testing
+                </div>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight mb-6">
+                    Don't Be the Inspector.<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-pink-600">Build the Robot.</span>
+                </h1>
+                <p class="text-lg text-slate-600 mb-8 leading-relaxed">
+                    Imagine manually checking every car door in a factory. Exhausting, right? Playwright is your automation robot—opening doors, starting engines, and checking lights 24/7 without getting tired.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#setup" class="px-8 py-3 text-base font-bold text-white bg-indigo-600 rounded-lg shadow-lg hover:bg-indigo-700 hover:shadow-xl transition transform hover:-translate-y-1">
+                        Start the Robot
+                    </a>
+                </div>
+            </div>
+            <div class="relative bg-slate-50 rounded-2xl p-8 border border-slate-100 shadow-inner flex items-center justify-center">
+                <!-- Concept Visualization using Unicode -->
+                <div class="text-center">
+                    <div class="text-9xl mb-4 animate-bounce">🤖</div>
+                    <p class="text-slate-400 font-mono text-sm">Automating Browsers...</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Section 1: The Efficiency Gap (Why Playwright?) -->
+    <section id="why" class="py-16 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">The Efficiency Gap</h2>
+                <p class="text-lg text-slate-600">
+                    Why switch to automation? Manual testing scales linearly with complexity, while Playwright scales instantly. The chart below illustrates the "Time & Effort" savings for a standard regression suite.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <div class="chart-container">
+                        <canvas id="efficiencyChart"></canvas>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold text-slate-800 mb-4">Manual vs. Automated</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-red-100 text-red-600 font-bold mr-4">1</span>
+                            <p class="text-slate-600"><strong>Manual Testing:</strong> Requires human interaction for every step. Slow, prone to fatigue errors, and impossible to run in parallel efficiently.</p>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-emerald-100 text-emerald-600 font-bold mr-4">2</span>
+                            <p class="text-slate-600"><strong>Playwright (The Robot):</strong> Runs thousands of checks simultaneously across Chromium, Firefox, and WebKit. What takes hours now takes minutes.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Installation Journey -->
+    <section id="setup" class="py-16 bg-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Hiring the Renovation Team</h2>
+                <p class="text-lg text-slate-600">
+                    Setting up Playwright isn't about buying a single tool. It's about hiring a full crew. One command sets up the blueprints (config), workers (browsers), and workspace (tests).
+                </p>
+                <div class="mt-6 inline-block bg-slate-900 text-emerald-400 font-mono text-xl px-6 py-3 rounded-lg shadow-lg">
+                    npm init playwright@latest
+                </div>
+            </div>
+
+            <!-- Vertical Timeline -->
+            <div class="relative max-w-4xl mx-auto">
+                <div class="timeline-line"></div>
+                
+                <!-- Step 1 -->
+                <div class="relative z-10 mb-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="md:text-right order-2 md:order-1">
+                        <h3 class="text-xl font-bold text-indigo-600">Language Selection</h3>
+                        <p class="text-slate-600 mt-2">The wizard asks: TypeScript or JavaScript? <br><strong>Recommendation: TypeScript</strong> for better safety.</p>
+                    </div>
+                    <div class="order-1 md:order-2 flex justify-center md:justify-start">
+                        <div class="w-12 h-12 bg-white border-4 border-indigo-600 rounded-full flex items-center justify-center text-xl font-bold text-slate-700 shadow-md">1</div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative z-10 mb-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="order-2 flex justify-center md:justify-end">
+                        <div class="w-12 h-12 bg-white border-4 border-pink-500 rounded-full flex items-center justify-center text-xl font-bold text-slate-700 shadow-md">2</div>
+                    </div>
+                    <div class="order-1">
+                        <h3 class="text-xl font-bold text-pink-500">Workspace Location</h3>
+                        <p class="text-slate-600 mt-2">Where to put tests? <br><strong>Default: /tests</strong>. This creates your project foundation.</p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative z-10 mb-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="md:text-right order-2 md:order-1">
+                        <h3 class="text-xl font-bold text-emerald-600">Recruiting Workers</h3>
+                        <p class="text-slate-600 mt-2">Install Playwright Browsers? <br><strong>YES.</strong> Automatically downloads Chromium, Firefox, and WebKit binaries.</p>
+                    </div>
+                    <div class="order-1 md:order-2 flex justify-center md:justify-start">
+                        <div class="w-12 h-12 bg-white border-4 border-emerald-600 rounded-full flex items-center justify-center text-xl font-bold text-slate-700 shadow-md">3</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Project Anatomy (What's Inside the Box) -->
+    <section class="py-16 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Inside the Box</h2>
+                <p class="text-lg text-slate-600">After the "renovation team" leaves, here is what your workspace looks like.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-indigo-500 card-hover">
+                    <div class="text-4xl mb-4">⚙️</div>
+                    <h3 class="text-lg font-bold text-slate-900">playwright.config.ts</h3>
+                    <p class="text-sm text-slate-500 mt-2">The Control Panel.</p>
+                    <p class="text-slate-600 mt-4 text-sm">Configures timeouts, browsers, retries, and reporting settings.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-pink-500 card-hover">
+                    <div class="text-4xl mb-4">📂</div>
+                    <h3 class="text-lg font-bold text-slate-900">tests/</h3>
+                    <p class="text-sm text-slate-500 mt-2">The Workspace.</p>
+                    <p class="text-slate-600 mt-4 text-sm">The directory where all your test files (.spec.ts) live.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-emerald-500 card-hover">
+                    <div class="text-4xl mb-4">📄</div>
+                    <h3 class="text-lg font-bold text-slate-900">example.spec.ts</h3>
+                    <p class="text-sm text-slate-500 mt-2">The Sample.</p>
+                    <p class="text-slate-600 mt-4 text-sm">A pre-written test demonstrating navigation and assertions.</p>
+                </div>
+                <!-- Card 4 -->
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-amber-500 card-hover">
+                    <div class="text-4xl mb-4">📦</div>
+                    <h3 class="text-lg font-bold text-slate-900">package.json</h3>
+                    <p class="text-sm text-slate-500 mt-2">The Inventory.</p>
+                    <p class="text-slate-600 mt-4 text-sm">Tracks your project dependencies and scripts.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Run Modes (Radar Chart) -->
+    <section id="modes" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="order-2 lg:order-1">
+                    <div class="bg-white rounded-xl shadow-lg p-6 border border-slate-100">
+                        <h3 class="text-center font-bold text-slate-500 mb-4 uppercase tracking-widest text-xs">Run Mode Attributes</h3>
+                        <div class="chart-container">
+                            <canvas id="modesRadarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-1 lg:order-2">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-6">Choose Your Weapon</h2>
+                    <p class="text-lg text-slate-600 mb-6">
+                        You can run tests in different modes depending on your immediate goal: Speed, Debugging, or Visual verification.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <span class="inline-flex items-center justify-center h-10 w-10 rounded-md bg-indigo-500 text-white font-mono font-bold">H</span>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-bold text-slate-900">Headless Mode (Standard)</h4>
+                                <code class="text-sm bg-slate-100 px-2 py-1 rounded text-indigo-600">npx playwright test</code>
+                                <p class="mt-1 text-slate-600">Fastest. Runs in background. Best for CI/CD.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <span class="inline-flex items-center justify-center h-10 w-10 rounded-md bg-pink-500 text-white font-mono font-bold">U</span>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-bold text-slate-900">UI Mode (Interactive)</h4>
+                                <code class="text-sm bg-slate-100 px-2 py-1 rounded text-pink-600">npx playwright test --ui</code>
+                                <p class="mt-1 text-slate-600">Best for writing tests. Time-travel debugging & watch mode.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <span class="inline-flex items-center justify-center h-10 w-10 rounded-md bg-emerald-500 text-white font-mono font-bold">V</span>
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="text-lg font-bold text-slate-900">Headed Mode (Visual)</h4>
+                                <code class="text-sm bg-slate-100 px-2 py-1 rounded text-emerald-600">npx playwright test --headed</code>
+                                <p class="mt-1 text-slate-600">Opens the actual browser window. Watch the robot work.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Reports (Doughnut Chart) -->
+    <section id="reports" class="py-16 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">The Medical Report</h2>
+                <p class="text-lg text-slate-600">
+                    Playwright generates detailed HTML reports. It’s not just "Pass/Fail"—it's a full health checkup. It identifies flaky tests, visual differences, and exact error locations.
+                </p>
+                <div class="mt-4">
+                    <code class="text-base bg-white border border-slate-200 px-4 py-2 rounded text-slate-700 shadow-sm">npx playwright show-report</code>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="bg-white rounded-xl shadow-lg p-8 card-hover order-2 md:order-1">
+                    <h3 class="text-center font-bold text-slate-900 mb-2">Sample Test Suite Results</h3>
+                    <div class="chart-container">
+                        <canvas id="reportChart"></canvas>
+                    </div>
+                </div>
+                <div class="order-1 md:order-2">
+                    <h3 class="text-2xl font-bold text-slate-900 mb-4">Understanding the Diagnosis</h3>
+                    <p class="text-slate-600 mb-6">
+                        The report breaks down test execution by browser (Chromium, Firefox, WebKit) and status.
+                    </p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 bg-emerald-50 rounded-lg border-l-4 border-emerald-500">
+                            <strong class="block text-emerald-700">Passed</strong>
+                            <span class="text-sm text-slate-600">Healthy features working as expected.</span>
+                        </div>
+                        <div class="p-4 bg-red-50 rounded-lg border-l-4 border-red-500">
+                            <strong class="block text-red-700">Failed</strong>
+                            <span class="text-sm text-slate-600">Bugs found. Report shows screenshots & traces.</span>
+                        </div>
+                        <div class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-500">
+                            <strong class="block text-amber-700">Flaky</strong>
+                            <span class="text-sm text-slate-600">Unstable tests. Sometimes pass, sometimes fail.</span>
+                        </div>
+                        <div class="p-4 bg-slate-100 rounded-lg border-l-4 border-slate-500">
+                            <strong class="block text-slate-700">Skipped</strong>
+                            <span class="text-sm text-slate-600">Tests intentionally not run (e.g., WIP).</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-2xl font-bold text-white mb-4">Ready to Automate?</h2>
+            <p class="text-slate-400 mb-8">Start your journey with Playwright today.</p>
+            <div class="text-sm text-slate-600">
+                Based on <a href="https://playwright.dev/docs/intro" target="_blank" class="text-indigo-400 hover:text-indigo-300">Playwright Official Documentation</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Charts and Logic -->
+    <script>
+        // Utility: Label Wrapper for Chart.js (16 char limit)
+        function splitLabel(label) {
+            if (label.length <= 16) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = words[0];
+
+            for (let i = 1; i < words.length; i++) {
+                if ((currentLine + " " + words[i]).length <= 16) {
+                    currentLine += " " + words[i];
+                } else {
+                    lines.push(currentLine);
+                    currentLine = words[i];
+                }
+            }
+            lines.push(currentLine);
+            return lines;
+        }
+
+        // Utility: Tooltip Callback Configuration
+        const tooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        // Chart 1: Efficiency Bar Chart (Comparison)
+        // Data: Simulated comparison of Manual vs Automated testing time
+        const ctxEfficiency = document.getElementById('efficiencyChart').getContext('2d');
+        new Chart(ctxEfficiency, {
+            type: 'bar',
+            data: {
+                labels: ['Setup Time (min)', 'Execution (min)', 'Coverage (%)'],
+                datasets: [
+                    {
+                        label: 'Manual Testing',
+                        data: [10, 120, 30], // Takes longer, less coverage
+                        backgroundColor: 'rgba(148, 163, 184, 0.7)', // Slate
+                        borderColor: 'rgb(148, 163, 184)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Playwright',
+                        data: [2, 5, 100], // Fast setup, fast run, full coverage
+                        backgroundColor: 'rgba(79, 70, 229, 0.8)', // Indigo
+                        borderColor: 'rgb(79, 70, 229)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    tooltip: tooltipConfig,
+                    title: { display: true, text: 'Manual vs. Robot Efficiency' }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Chart 2: Modes Radar Chart (Comparison)
+        // Comparison of Headless, UI, and Headed modes on 3 attributes
+        const ctxModes = document.getElementById('modesRadarChart').getContext('2d');
+        new Chart(ctxModes, {
+            type: 'radar',
+            data: {
+                labels: ['Execution Speed', 'Visual Feedback', 'Debugging Tools', 'Resource Usage', 'Realism'],
+                datasets: [
+                    {
+                        label: 'Headless Mode',
+                        data: [95, 10, 20, 90, 80],
+                        fill: true,
+                        backgroundColor: 'rgba(79, 70, 229, 0.2)', // Indigo
+                        borderColor: 'rgb(79, 70, 229)',
+                        pointBackgroundColor: 'rgb(79, 70, 229)',
+                    },
+                    {
+                        label: 'UI Mode',
+                        data: [60, 90, 100, 50, 85],
+                        fill: true,
+                        backgroundColor: 'rgba(219, 39, 119, 0.2)', // Pink
+                        borderColor: 'rgb(219, 39, 119)',
+                        pointBackgroundColor: 'rgb(219, 39, 119)',
+                    },
+                    {
+                        label: 'Headed Mode',
+                        data: [40, 100, 60, 40, 100],
+                        fill: true,
+                        backgroundColor: 'rgba(5, 150, 105, 0.2)', // Emerald
+                        borderColor: 'rgb(5, 150, 105)',
+                        pointBackgroundColor: 'rgb(5, 150, 105)',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { boxWidth: 10 } },
+                    tooltip: tooltipConfig
+                },
+                scales: {
+                    r: {
+                        angleLines: { color: '#e2e8f0' },
+                        grid: { color: '#e2e8f0' },
+                        pointLabels: {
+                            font: { size: 12, family: 'Inter' }
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 100
+                    }
+                }
+            }
+        });
+
+        // Chart 3: Reports Doughnut Chart (Inform)
+        // Simulated test result data
+        const ctxReport = document.getElementById('reportChart').getContext('2d');
+        const reportLabels = ['Passed (Healthy)', 'Failed (Bugs)', 'Flaky (Unstable)', 'Skipped'];
+        const processedReportLabels = reportLabels.map(splitLabel);
+
+        new Chart(ctxReport, {
+            type: 'doughnut',
+            data: {
+                labels: processedReportLabels,
+                datasets: [{
+                    label: 'Test Cases',
+                    data: [145, 12, 5, 8],
+                    backgroundColor: [
+                        '#10b981', // Emerald (Pass)
+                        '#ef4444', // Red (Fail)
+                        '#f59e0b', // Amber (Flaky)
+                        '#94a3b8'  // Slate (Skipped)
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    tooltip: tooltipConfig,
+                    title: { display: false }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
