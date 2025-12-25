@@ -34,3 +34,4 @@ playwright_automation_learning
 
 # Open CODEGEN
 npx playwright codegen https://playwright.dev/
+
