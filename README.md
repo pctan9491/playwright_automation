@@ -16,6 +16,7 @@ This project is set up for learning Playwright with TypeScript.
 | **Generate Test Code** | `npx playwright codegen demo.playwright.dev/todomvc` |
 | **Show Report** | `npx playwright show-report` |
 | **Kill the Existing Process** | `Stop-Process -Id (Get-NetTCPConnection -LocalPort 9323).OwningProcess -Force` |
+| **run tests that have a particular tag with --grep command line option** | `npx playwright test --grep @first` |
 
 ## 📂 Project Structure
 
