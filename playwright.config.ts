@@ -13,6 +13,9 @@ dotenv.config({ path: path.resolve(__dirname, '.env') });
  */
 export default defineConfig({
   testDir: './tests',
+  globalSetup: path.resolve(__dirname, './global-setup.ts'),
+  globalTeardown: path.resolve(__dirname, './global-teardown.ts'),
+
   /* Maximum time one test can run for. */
   timeout: 60 * 1000,
   /* Run tests in files in parallel */

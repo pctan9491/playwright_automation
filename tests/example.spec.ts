@@ -1,4 +1,3 @@
-// @ts-ignore: Cannot find module '@playwright/test' or its corresponding type declarations.
 import { test, expect } from '@playwright/test';
 
 test.skip('has title', async ({ page }) => {
